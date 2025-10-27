@@ -22,13 +22,13 @@ public class DemoData {
         saveAlbum(new Album(null, "Hunting High and Low", "A-ha", 
             "https://i.scdn.co/image/ab67616d0000b273e8dd4db47e7177c63b0b7d53", "1985", 12300000));
         saveAlbum(new Album(null, "Scoundrel Days", "A-ha", 
-            "https://i.scdn.co/image/ab67616d0000b273a5c512cc8b0c8c5c9d5e5f5e", "1986", 8500000));
+            "https://i.scdn.co/image/ab67616d0000b273fa44cf1fb96bdc5e6db5e3ad", "1986", 8500000));
         saveAlbum(new Album(null, "Stay on These Roads", "A-ha", 
-            "https://i.scdn.co/image/ab67616d0000b273b0b7c5c6c8d5e7f5e5e5e5e5", "1988", 7200000));
+            "https://i.scdn.co/image/ab67616d0000b27310816799318a67035593e8df", "1988", 7200000));
         saveAlbum(new Album(null, "East of the Sun, West of the Moon", "A-ha", 
-            "https://i.scdn.co/image/ab67616d0000b273c7d5e7f5e5e5e5e5e5e5e5e5", "1990", 6100000));
+            "https://i.scdn.co/image/ab67616d0000b2738f06acbdda9c202ca4ae2ce3", "1990", 6100000));
         saveAlbum(new Album(null, "Memorial Beach", "A-ha", 
-            "https://i.scdn.co/image/ab67616d0000b273d5e7f5e5e5e5e5e5e5e5e5e5", "1993", 5400000));
+            "https://upload.wikimedia.org/wikipedia/en/4/42/A-ha_Memorial_Beach.jpg", "1993", 5400000));
 
         // Initialize Songs for Album 1 - "Hunting High and Low"
         saveSong(new Song(null, "Take on Me", "A-ha", "Hunting High and Low", 1L, "3:45", 990079535L));
