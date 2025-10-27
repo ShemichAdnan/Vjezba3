@@ -68,6 +68,7 @@ public class HomeController {
             songsList = data.findAllSongs();
         }
         model.addAttribute("songs", songsList);
+        model.addAttribute("albums", data.findAllAlbums());
         return "songs";
     }
 
@@ -85,6 +86,19 @@ public class HomeController {
         model.addAttribute("searchQuery", q);
         
         return "albums";
+    }
+
+    @PostMapping("/songs/add")
+    public String addSong(@RequestParam String title, 
+                         @RequestParam String artist, 
+                         @RequestParam Long albumId,
+                         @RequestParam String duration) {
+        Album album = data.findAlbum(albumId);
+        if (album != null) {
+            Song song = new Song(null, title, artist, album.getName(), albumId, duration, 0L);
+            data.saveSong(song);
+        }
+        return "redirect:/songs";
     }
 
     @PostMapping("/songs/save")
