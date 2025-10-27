@@ -338,9 +338,7 @@
             </div>
 
             <section class="section">
-                <h1 class="section-title" th:text="${searchQuery != null ? 'Search Results for \'' + searchQuery + '\'' : 'All Albums'}">All Albums</h1>
-                
-                <div th:if="${#lists.isEmpty(albums)}" class="no-results">
+                <h1 class="section-title" th:text="${searchQuery != null ? 'Search Results for &quot;' + searchQuery + '&quot;' : 'All Albums'}">All Albums</h1><div th:if="${#lists.isEmpty(albums)}" class="no-results">
                     <h3>No albums found</h3>
                     <p>Try searching with different keywords</p>
                 </div>
