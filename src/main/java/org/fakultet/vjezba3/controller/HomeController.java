@@ -1,8 +1,10 @@
 package org.fakultet.vjezba3.controller;
 
-import org.fakultet.vjezba3.data.DemoData;
+import jakarta.servlet.http.HttpSession;
 import org.fakultet.vjezba3.model.Album;
 import org.fakultet.vjezba3.model.Song;
+import org.fakultet.vjezba3.repository.AlbumRepository;
+import org.fakultet.vjezba3.repository.SongRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,65 +12,73 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class HomeController {
-    private final DemoData data;
+    private final AlbumRepository albumRepository;
+    private final SongRepository songRepository;
 
-    public HomeController(DemoData data) {
-        this.data = data;
+    public HomeController(AlbumRepository albumRepository, SongRepository songRepository) {
+        this.albumRepository = albumRepository;
+        this.songRepository = songRepository;
     }
 
     @GetMapping("/")
-    public String home(Model model) {
-        ArrayList<Album> popularAlbums = data.findAllAlbums();
-        ArrayList<Song> popularSongs = data.findAllSongs();
+    public String home(Model model, HttpSession session) {
+        List<Album> popularAlbums = albumRepository.findAll();
+        List<Song> popularSongs = songRepository.findAll();
         
         model.addAttribute("popularAlbums", popularAlbums.size() > 6 ? 
-            new ArrayList<>(popularAlbums.subList(0, 6)) : popularAlbums);
+            popularAlbums.subList(0, 6) : popularAlbums);
         model.addAttribute("popularSongs", popularSongs.size() > 5 ? 
-            new ArrayList<>(popularSongs.subList(0, 5)) : popularSongs);
+            popularSongs.subList(0, 5) : popularSongs);
+        model.addAttribute("loggedInUser", session.getAttribute("loggedInUser"));
         
         return "index";
     }
 
     @GetMapping("/albums")
-    public String albums(@RequestParam(required = false) String search, Model model) {
-        ArrayList<Album> albumsList;
+    public String albums(@RequestParam(required = false) String search, Model model, HttpSession session) {
+        List<Album> albumsList;
         if (search != null && !search.trim().isEmpty()) {
-            albumsList = data.searchAlbums(search);
+            albumsList = albumRepository.findByNameContainingIgnoreCaseOrArtistContainingIgnoreCase(search, search);
             model.addAttribute("searchQuery", search);
         } else {
-            albumsList = data.findAllAlbums();
+            albumsList = albumRepository.findAll();
         }
         model.addAttribute("albums", albumsList);
+        model.addAttribute("loggedInUser", session.getAttribute("loggedInUser"));
         return "albums";
     }
 
     @GetMapping("/album/{id}")
-    public String albumDetail(@PathVariable Long id, Model model) {
-        Album album = data.findAlbum(id);
-        if (album != null) {
-            album.setSongs(data.findSongsByAlbumId(id));
-            model.addAttribute("album", album);
-            model.addAttribute("songs", album.getSongs());
-            return "album-detail";
-        }
-        return "redirect:/albums";
+    public String albumDetail(@PathVariable Long id, Model model, HttpSession session) {
+        return albumRepository.findById(id)
+            .map(album -> {
+                List<Song> songs = songRepository.findByAlbumId(id);
+                album.setSongs(songs);
+                model.addAttribute("album", album);
+                model.addAttribute("songs", songs);
+                model.addAttribute("loggedInUser", session.getAttribute("loggedInUser"));
+                return "album-detail";
+            })
+            .orElse("redirect:/albums");
     }
 
     @GetMapping("/songs")
-    public String songs(@RequestParam(required = false) String search, Model model) {
-        ArrayList<Song> songsList;
+    public String songs(@RequestParam(required = false) String search, Model model, HttpSession session) {
+        List<Song> songsList;
         if (search != null && !search.trim().isEmpty()) {
-            songsList = data.searchSongs(search);
+            songsList = songRepository.findByTitleContainingIgnoreCaseOrArtistContainingIgnoreCaseOrAlbumNameContainingIgnoreCase(
+                search, search, search);
             model.addAttribute("searchQuery", search);
         } else {
-            songsList = data.findAllSongs();
+            songsList = songRepository.findAll();
         }
         model.addAttribute("songs", songsList);
-        model.addAttribute("albums", data.findAllAlbums());
+        model.addAttribute("albums", albumRepository.findAll());
+        model.addAttribute("loggedInUser", session.getAttribute("loggedInUser"));
         return "songs";
     }
 
@@ -78,8 +88,9 @@ public class HomeController {
             return "redirect:/albums";
         }
         
-        ArrayList<Album> albumsList = data.searchAlbums(q);
-        ArrayList<Song> songsList = data.searchSongs(q);
+        List<Album> albumsList = albumRepository.findByNameContainingIgnoreCaseOrArtistContainingIgnoreCase(q, q);
+        List<Song> songsList = songRepository.findByTitleContainingIgnoreCaseOrArtistContainingIgnoreCaseOrAlbumNameContainingIgnoreCase(
+            q, q, q);
         
         model.addAttribute("albums", albumsList);
         model.addAttribute("songs", songsList);
@@ -93,12 +104,13 @@ public class HomeController {
                          @RequestParam String artist, 
                          @RequestParam Long albumId,
                          @RequestParam String duration) {
-        Album album = data.findAlbum(albumId);
-        if (album != null) {
-            Song song = new Song(null, title, artist, album.getName(), albumId, duration, 0L);
-            data.saveSong(song);
-        }
-        return "redirect:/songs";
+        return albumRepository.findById(albumId)
+            .map(album -> {
+                Song song = new Song(title, artist, album.getName(), album, duration, 0L);
+                songRepository.save(song);
+                return "redirect:/songs";
+            })
+            .orElse("redirect:/songs");
     }
 
     @PostMapping("/songs/save")
@@ -108,9 +120,11 @@ public class HomeController {
                           @RequestParam Long albumId,
                           @RequestParam String duration,
                           Model model) {
-        Song song = new Song(null, title, artist, album, albumId, duration, 0L);
-        data.saveSong(song);
-        model.addAttribute("songs", data.findAllSongs());
+        albumRepository.findById(albumId).ifPresent(albumEntity -> {
+            Song song = new Song(title, artist, album, albumEntity, duration, 0L);
+            songRepository.save(song);
+        });
+        model.addAttribute("songs", songRepository.findAll());
         return "songs";
     }
 }
