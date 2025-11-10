@@ -109,4 +109,4 @@ src/
 ./mvnw spring-boot:run
 ```
 
-The application will be available at `http://localhost:8080`
+The application will be available at `http://localhost:7777`
