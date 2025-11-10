@@ -318,6 +318,30 @@
             transform: scale(1.04);
         }
 
+        .favorite-button {
+            background: transparent;
+            border: none;
+            color: #b3b3b3;
+            cursor: pointer;
+            font-size: 32px;
+            padding: 8px;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .favorite-button:hover {
+            color: #1db954;
+            transform: scale(1.1);
+        }
+
+        .favorite-button.favorited {
+            color: #1db954;
+        }
+
+        .favorite-button.favorited:hover {
+            color: #b3b3b3;
+        }
+
         .more-button {
             background: transparent;
             border: none;
@@ -579,7 +603,21 @@
                         <path d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"/>
                     </svg>
                 </button>
-                <button class="follow-button">Following</button>
+                
+                <!-- Favorite Button - Only show if user is logged in -->
+                <form th:if="${loggedInUser != null}" 
+                      th:action="${loggedInUser.favoriteAlbums.contains(album) ? '/albums/' + album.id + '/unfavorite' : '/albums/' + album.id + '/favorite'}" 
+                      method="post" 
+                      style="display: inline;">
+                    <button type="submit" 
+                            class="favorite-button"
+                            th:classappend="${loggedInUser.favoriteAlbums.contains(album) ? 'favorited' : ''}"
+                            th:title="${loggedInUser.favoriteAlbums.contains(album) ? 'Remove from favorites' : 'Add to favorites'}">
+                        <span th:if="${loggedInUser.favoriteAlbums.contains(album)}">♥</span>
+                        <span th:unless="${loggedInUser.favoriteAlbums.contains(album)}">♡</span>
+                    </button>
+                </form>
+                
                 <button class="more-button">•••</button>
             </div>
 
