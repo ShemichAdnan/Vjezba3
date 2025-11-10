@@ -89,6 +89,13 @@
             display: flex;
             gap: 16px;
             padding: 16px 32px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 16px;
         }
 
         .nav-btn {
@@ -102,6 +109,102 @@
             justify-content: center;
             cursor: pointer;
             color: #ffffff;
+        }
+
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background-color: #282828;
+            border-radius: 4px;
+            min-width: 160px;
+            box-shadow: 0 16px 24px rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 4px;
+        }
+
+        .user-dropdown:hover .user-menu {
+            display: block;
+        }
+
+        .user-menu-item {
+            display: block;
+            padding: 12px 16px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 2px;
+            transition: background-color 0.2s;
+        }
+
+        .user-menu-item:hover {
+            background-color: #3e3e3e;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .auth-btn {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 32px;
+            border-radius: 500px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-login {
+            color: #b3b3b3;
+        }
+
+        .btn-login:hover {
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .btn-signup {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .btn-signup:hover {
+            background-color: #f6f6f6;
+            transform: scale(1.05);
         }
 
         /* Album Header */
@@ -213,6 +316,30 @@
         .follow-button:hover {
             border-color: #ffffff;
             transform: scale(1.04);
+        }
+
+        .favorite-button {
+            background: transparent;
+            border: none;
+            color: #b3b3b3;
+            cursor: pointer;
+            font-size: 32px;
+            padding: 8px;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .favorite-button:hover {
+            color: #1db954;
+            transform: scale(1.1);
+        }
+
+        .favorite-button.favorited {
+            color: #1db954;
+        }
+
+        .favorite-button.favorited:hover {
+            color: #b3b3b3;
         }
 
         .more-button {
@@ -415,14 +542,40 @@
                     </svg>
                     <span>Songs</span>
                 </a>
+                <a href="/users" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 512 512">
+                        <path d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        <path d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/>
+                    </svg>
+                    <span>Users</span>
+                </a>
             </nav>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
-                <button class="nav-btn" onclick="history.back()">←</button>
-                <button class="nav-btn" onclick="history.forward()">→</button>
+                <div class="nav-buttons">
+                    <button class="nav-btn" onclick="history.back()">←</button>
+                    <button class="nav-btn" onclick="history.forward()">→</button>
+                </div>
+
+                <!-- User Profile or Auth Buttons -->
+                <div th:if="${loggedInUser != null}" class="user-profile">
+                    <div class="user-dropdown">
+                        <div class="user-avatar" th:text="${#strings.substring(loggedInUser.username, 0, 1).toUpperCase()}">U</div>
+                        <div class="user-menu">
+                            <a href="/users" class="user-menu-item">
+                                <span th:text="${loggedInUser.username}">Username</span>
+                            </a>
+                            <a href="/users/logout" class="user-menu-item">Logout</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${loggedInUser == null}" class="auth-buttons">
+                    <a href="/users/login" class="auth-btn btn-login">Log in</a>
+                    <a href="/users/register" class="auth-btn btn-signup">Sign up</a>
+                </div>
             </div>
 
             <div class="album-header" th:if="${album != null}">
@@ -452,7 +605,21 @@
                         <path d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"/>
                     </svg>
                 </button>
-                <button class="follow-button">Following</button>
+                
+                <!-- Favorite Button - Only show if user is logged in -->
+                <form th:if="${loggedInUser != null}" 
+                      th:action="${loggedInUser.favoriteAlbums.contains(album) ? '/albums/' + album.id + '/unfavorite' : '/albums/' + album.id + '/favorite'}" 
+                      method="post" 
+                      style="display: inline;">
+                    <button type="submit" 
+                            class="favorite-button"
+                            th:classappend="${loggedInUser.favoriteAlbums.contains(album) ? 'favorited' : ''}"
+                            th:title="${loggedInUser.favoriteAlbums.contains(album) ? 'Remove from favorites' : 'Add to favorites'}">
+                        <span th:if="${loggedInUser.favoriteAlbums.contains(album)}">♥</span>
+                        <span th:unless="${loggedInUser.favoriteAlbums.contains(album)}">♡</span>
+                    </button>
+                </form>
+                
                 <button class="more-button">•••</button>
             </div>
 

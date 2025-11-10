@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Music App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(180deg, #121212 0%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background-color: #181818;
+            border-radius: 8px;
+            padding: 48px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 4px;
+            border: 1px solid #535353;
+            background-color: #121212;
+            color: #ffffff;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1db954;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 500px;
+            border: none;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #1db954;
+            color: #000;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary:hover {
+            background-color: #1ed760;
+            transform: scale(1.04);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #b3b3b3;
+            border: 1px solid #535353;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .alert-success {
+            background-color: #1db954;
+            color: #000;
+        }
+
+        .alert-error {
+            background-color: #e22134;
+            color: #fff;
+        }
+
+        .text-center {
+            text-align: center;
+            margin-top: 24px;
+            color: #b3b3b3;
+        }
+
+        .text-center a {
+            color: #1db954;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .text-center a:hover {
+            color: #1ed760;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Login</h1>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <form th:action="@{/users/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a href="/users" class="btn btn-secondary">Cancel</a>
+        </form>
+
+        <div class="text-center">
+            Don't have an account? <a href="/users/register">Register here</a>
+        </div>
+    </div>
+</body>
+</html>

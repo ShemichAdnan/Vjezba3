@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Music App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(180deg, #121212 0%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 32px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 500px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #1db954;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #1ed760;
+            transform: scale(1.04);
+        }
+
+        .btn-secondary {
+            background-color: #282828;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #3e3e3e;
+        }
+
+        .btn-danger {
+            background-color: #e22134;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff3347;
+        }
+
+        .btn-edit {
+            background-color: #1db954;
+            color: #000;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .alert {
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #1db954;
+            color: #000;
+        }
+
+        .alert-error {
+            background-color: #e22134;
+            color: #fff;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .user-card {
+            background-color: #181818;
+            border-radius: 8px;
+            padding: 24px;
+            transition: background-color 0.3s;
+        }
+
+        .user-card:hover {
+            background-color: #282828;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1db954, #1ed760);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .user-info p {
+            font-size: 14px;
+            color: #b3b3b3;
+        }
+
+        .user-details {
+            margin-bottom: 16px;
+        }
+
+        .user-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #282828;
+            font-size: 14px;
+        }
+
+        .user-detail-label {
+            color: #b3b3b3;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #1db954;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .back-link:hover {
+            color: #1ed760;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <h1>Users</h1>
+
+        <div class="actions">
+            <a href="/users/register" class="btn btn-primary">Register New User</a>
+            <a href="/users/login" class="btn btn-secondary">Login</a>
+            <a href="/" class="btn btn-secondary">Home</a>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="users-grid">
+            <div th:each="user : ${users}" class="user-card">
+                <div class="user-header">
+                    <div class="user-avatar" th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}"></div>
+                    <div class="user-info">
+                        <h3 th:text="${user.username}">Username</h3>
+                        <p th:text="${user.email}">email@example.com</p>
+                    </div>
+                </div>
+                
+                <div class="user-details">
+                    <div class="user-detail-item">
+                        <span class="user-detail-label">Full Name:</span>
+                        <span th:text="${user.fullName}">Full Name</span>
+                    </div>
+                    <div class="user-detail-item">
+                        <span class="user-detail-label">Favorite Albums:</span>
+                        <span th:text="${#lists.size(user.favoriteAlbums)}">0</span>
+                    </div>
+                </div>
+
+                <div class="user-actions">
+                    <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-edit">Edit</a>
+                    <a th:href="@{/users/delete/{id}(id=${user.id})}" 
+                       class="btn btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(users)}" style="text-align: center; padding: 60px; color: #b3b3b3;">
+            <h2>No users found</h2>
+            <p>Be the first to register!</p>
+        </div>
+    </div>
+</body>
+</html>

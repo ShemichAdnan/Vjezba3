@@ -139,6 +139,102 @@
             color: #757575;
         }
 
+        /* User Profile */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1db954, #1ed760);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background-color: #282828;
+            border-radius: 4px;
+            padding: 4px;
+            min-width: 160px;
+            box-shadow: 0 16px 24px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-dropdown:hover .user-menu {
+            display: block;
+        }
+
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 2px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .user-menu-item:hover {
+            background-color: #3e3e3e;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .auth-btn {
+            padding: 8px 24px;
+            border-radius: 500px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+
+        .btn-login:hover {
+            transform: scale(1.04);
+            border-color: #1db954;
+            color: #1db954;
+        }
+
+        .btn-signup {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-signup:hover {
+            transform: scale(1.04);
+        }
+
         /* Section */
         .section {
             margin-bottom: 40px;
@@ -348,9 +444,18 @@
                 </a>
                 <a href="/songs" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 512 512">
-                        <path d="M183.83 480a55.2 55.2 0 01-32.36-10.55A56.64 56.64 0 01128 423.58a50.26 50.26 0 014.62-27.73 47.74 47.74 0 0115.67-18.13c9.15-6.34 20.28-10.3 32-11.5a50.58 50.58 0 0112.76 0 54.76 54.76 0 0117.1 5.34A58.52 58.52 0 01232 392.08V146l176-53.84v196.34a50.26 50.26 0 014.62 27.73 56.64 56.64 0 01-23.47 45.87A55.2 55.2 0 01356.83 373a58.52 58.52 0 01-21.85-20.52 54.76 54.76 0 01-7.1-17.1 50.58 50.58 0 010-12.76c1.2-11.72 5.16-22.85 11.5-32a47.74 47.74 0 0118.13-15.67A50.26 50.26 0 01385.24 271a56.64 56.64 0 0145.87 23.47A55.2 55.2 0 01442 327.83V32l64 32v300.58a56.64 56.64 0 01-23.47 45.87A55.2 55.2 0 01450.17 421a58.52 58.52 0 01-21.85-20.52A54.76 54.76 0 01421.22 383a50.58 50.58 0 010-12.76c1.2-11.72 5.16-22.85 11.5-32a47.74 47.74 0 0118.13-15.67" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        <path d="M183.83 480a55.2 55.2 0 01-32.36-10.55A56.64 56.64 0 01128 423.58a50.26 50.26 0 014.62-27.73 47.74 47.74 0 0115.67-18.13c9.15-6.34 20.28-10.3 32-11.5a50.58 50.58 0 0112.76 0 54.76 54.76 0 0117.1 5.34A58.52 58.52 0 01232 392.08V146l176-53.84v196.34a50.26 50.26 0 014.62 27.73 56.64 56.64 0 01-23.47 45.87A55.2 55.2 0 01356.83 373a58.52 58.52 0 01-21.85-20.52 54.76 54.76 0 01-7.10-17.1 50.58 50.58 0 010-12.76c1.2-11.72 5.16-22.85 11.5-32a47.74 47.74 0 0118.13-15.67A50.26 50.26 0 01385.24 271a56.64 56.64 0 0145.87 23.47A55.2 55.2 0 01442 327.83V32l64 32v300.58a56.64 56.64 0 01-23.47 45.87A55.2 55.2 0 01450.17 421a58.52 58.52 0 01-21.85-20.52A54.76 54.76 0 01421.22 383a50.58 50.58 0 010-12.76c1.2-11.72 5.16-22.85 11.5-32a47.74 47.74 0 0118.13-15.67" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
                     </svg>
                     <span>Songs</span>
+                </a>
+                <a href="/users" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 512 512">
+                        <path d="M402 168c-2.93 40.67-33.1 72-66 72s-63.12-31.32-66-72c-3-42.31 26.37-72 66-72s69 30.46 66 72z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        <path d="M336 304c-65.17 0-127.84 32.37-143.54 95.41-2.08 8.34 3.15 16.59 11.72 16.59h263.65c8.57 0 13.77-8.25 11.72-16.59C463.85 335.36 401.18 304 336 304z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/>
+                        <path d="M200 185.94c-2.34 32.48-26.72 58.06-53 58.06s-50.7-25.57-53-58.06C91.61 152.15 115.34 128 147 128s55.39 24.77 53 57.94z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        <path d="M206 306c-18.05-8.27-37.93-11.45-59-11.45-52 0-102.1 25.85-114.65 76.2-1.65 6.66 2.53 13.25 9.37 13.25H154" fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"/>
+                    </svg>
+                    <span>Users</span>
                 </a>
             </nav>
         </div>
@@ -372,6 +477,23 @@
                            th:value="${searchQuery}" 
                            placeholder="Search albums and songs..." />
                 </form>
+
+                <!-- User Profile or Auth Buttons -->
+                <div th:if="${loggedInUser != null}" class="user-profile">
+                    <div class="user-dropdown">
+                        <div class="user-avatar" th:text="${#strings.substring(loggedInUser.username, 0, 1).toUpperCase()}">U</div>
+                        <div class="user-menu">
+                            <a href="/users" class="user-menu-item">
+                                <span th:text="${loggedInUser.username}">Username</span>
+                            </a>
+                            <a href="/users/logout" class="user-menu-item">Logout</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${loggedInUser == null}" class="auth-buttons">
+                    <a href="/users/login" class="auth-btn btn-login">Log in</a>
+                    <a href="/users/register" class="auth-btn btn-signup">Sign up</a>
+                </div>
             </div>
 
             <section class="section">
